@@ -5,7 +5,8 @@ import common.Constants.DiskOperationType;
 import dblockcache.DBuffer;
 
 
-public interface IVirtualDisk {
+public interface IVirtualDisk
+{
 	
 	/*
 	 * Start an asynchronous request to the underlying device/disk/volume.   
