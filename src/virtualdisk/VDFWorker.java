@@ -10,7 +10,7 @@ public class VDFWorker implements Runnable {
 	public Queue<Request> vdfRequests;
 	public VirtualDisk vdf;
 	
-	public VDFWorker(Queue vdfRequests){
+	public VDFWorker(Queue<Request> vdfRequests){
 		this.vdfRequests = vdfRequests;
 		this.vdf = DukeVDF.getInstance();
 	}
@@ -19,7 +19,7 @@ public class VDFWorker implements Runnable {
 	public void run() {
 		// TODO Auto-generated method stub
 		while(true){
-			if(vdfRequests != null){
+			if(vdfRequests != null){	
 				if(vdfRequests.size() > 0){
 					Request currentRequest = vdfRequests.poll();
 					switch(currentRequest.getOperation()){
