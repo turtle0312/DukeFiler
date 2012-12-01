@@ -2,8 +2,10 @@ package dblockcache;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Set;
 
 import virtualdisk.DukeVDF;
 
@@ -11,12 +13,13 @@ public class DukeDBCache extends DBufferCache
 {
 	
 	private static DBufferCache dBufCache; 
-	private HashSet<DBuffer> cacheSet; 
+	private Set<DBuffer> cacheSet; 
 	
 	private DukeDBCache(int cacheSize) 
 	{
 		super(cacheSize);
-		cacheSet = new LinkedHashSet<DBuffer>(); 
+		HashSet<DBuffer> set = new LinkedHashSet<DBuffer>(); 
+		cacheSet = Collections.synchronizedSet(set);
 		// TODO Auto-generated constructor stub
 	}
 	
@@ -38,7 +41,7 @@ public class DukeDBCache extends DBufferCache
 	@Override
 	public void releaseBlock(DBuffer buf) 
 	{
-		// TODO Auto-generated method stub
+	
 		
 	}
 
