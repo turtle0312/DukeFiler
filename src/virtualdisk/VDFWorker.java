@@ -1,6 +1,9 @@
 package virtualdisk;
 
+import java.io.IOException;
 import java.util.Queue;
+
+import common.Constants.DiskOperationType;
 
 public class VDFWorker implements Runnable {
 
@@ -19,7 +22,24 @@ public class VDFWorker implements Runnable {
 			if(vdfRequests != null){
 				if(vdfRequests.size() > 0){
 					Request currentRequest = vdfRequests.poll();
-					if(currentRequess)
+					switch(currentRequest.getOperation()){
+					case READ:
+						try {
+							vdf.readBlock(currentRequest.getBuffer());
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					case WRITE:
+						try {
+							vdf.writeBlock(currentRequest.getBuffer());
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					currentRequest.getBuffer();
+					currentRequest.getOperation();
 				}
 			}
 		}

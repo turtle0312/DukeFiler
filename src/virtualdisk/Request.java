@@ -15,12 +15,12 @@ public class Request
 		myOperation = operation; 
 	}
 	
-	private DBuffer getBuffer()
+	public DBuffer getBuffer()
 	{
 		return myBuf; 
 	}
 	
-	private DiskOperationType getOperation()
+	public DiskOperationType getOperation()
 	{
 		return myOperation; 
 	}
