@@ -14,4 +14,14 @@ public class Request
 		myBuf = buf; 
 		myOperation = operation; 
 	}
+	
+	private DBuffer getBuffer()
+	{
+		return myBuf; 
+	}
+	
+	private DiskOperationType getOperation()
+	{
+		return myOperation; 
+	}
 }
