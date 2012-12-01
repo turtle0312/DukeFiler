@@ -19,7 +19,9 @@ public abstract class VirtualDisk implements IVirtualDisk {
 	private String _volName;
 	private RandomAccessFile _file;
 	private int _maxVolSize;
-
+	// public int offset; 
+	public LinkedList iNodes; // LinkedList of Arrays
+	public LinkedList dataBlocks; //LinkedList of bytes
 	/*
 	 * VirtualDisk Constructors
 	 */
@@ -45,6 +47,10 @@ public abstract class VirtualDisk implements IVirtualDisk {
 		if(format) {
 			formatStore();
 		}
+
+		/* Create VDF Block layout, add metadata/offset */
+		// iNodes = new LinkedList()
+
 		/* Other methods as required */
 	}
 	
