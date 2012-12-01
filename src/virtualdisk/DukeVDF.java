@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Queue;
 import java.util.concurrent.SynchronousQueue;
 
+import common.Constants;
 import common.Constants.DiskOperationType;
 
 import dblockcache.DBuffer;
@@ -14,7 +15,8 @@ public class DukeVDF extends VirtualDisk {
 	public Queue vdfRequests;
 	private static VirtualDisk vdf;
 	
-	public static VirtualDisk getInstance(){
+	public static VirtualDisk getInstance()
+	{
 		if(vdf == null){
 			try {
 				vdf = new DukeVDF();
@@ -37,10 +39,11 @@ public class DukeVDF extends VirtualDisk {
 	}
 
 	@Override
-	public synchronized void startRequest(DBuffer buf, DiskOperationType operation)
-			throws IllegalArgumentException, IOException {
+	public synchronized void startRequest(DBuffer buf, DiskOperationType operation) throws IllegalArgumentException, IOException 
+			{
 		// TODO Auto-generated method stub
-		
-	}
+				Request request = new Request(buf, operation); 
+				vdfRequests.add(request); 
+			}
 
 }

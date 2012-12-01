@@ -4,7 +4,7 @@ import common.Constants;
 
 public abstract class DBufferCache {
 	
-	private int _cacheSize;
+	protected int _cacheSize;
 	
 	/*
 	 * Constructor: allocates a cacheSize number of cache blocks, each
@@ -16,7 +16,7 @@ public abstract class DBufferCache {
 	
 	/*
 	 * Get buffer for block specified by blockID. The buffer is "held" until the
-	 * caller releases it. A “held” buffer cannot be evicted: its block ID
+	 * caller releases it. A "held" buffer cannot be evicted:: its block ID
 	 * cannot change.
 	 */
 	public abstract DBuffer getBlock(int blockID);

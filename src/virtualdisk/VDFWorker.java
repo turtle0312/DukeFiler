@@ -7,6 +7,7 @@ import common.Constants.DiskOperationType;
 
 public class VDFWorker implements Runnable {
 
+
 	public Queue<Request> vdfRequests;
 	public VirtualDisk vdf;
 	
@@ -16,11 +17,13 @@ public class VDFWorker implements Runnable {
 	}
 	
 	@Override
+
 	public void run() {
 		// TODO Auto-generated method stub
 		while(true){
 			if(vdfRequests != null){	
-				if(vdfRequests.size() > 0){
+				if(vdfRequests.size() > 0)
+				{
 					Request currentRequest = vdfRequests.poll();
 					switch(currentRequest.getOperation()){
 					case READ:
@@ -38,11 +41,10 @@ public class VDFWorker implements Runnable {
 							e.printStackTrace();
 						}
 					}
-					currentRequest.getBuffer();
-					currentRequest.getOperation();
 				}
 			}
 		}
+
 	}
 
 }
