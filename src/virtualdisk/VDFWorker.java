@@ -1,16 +1,12 @@
 package virtualdisk;
 
-<<<<<<< HEAD
-public class VDFWorker implements Runnable 
-{
-=======
 import java.io.IOException;
 import java.util.Queue;
 
 import common.Constants.DiskOperationType;
 
 public class VDFWorker implements Runnable {
->>>>>>> 90e2bb8611e5be08a79ef48a738b0efbc5e7312b
+
 
 	public Queue<Request> vdfRequests;
 	public VirtualDisk vdf;
@@ -21,11 +17,7 @@ public class VDFWorker implements Runnable {
 	}
 	
 	@Override
-<<<<<<< HEAD
-	public void run() 
-	{
-		
-=======
+
 	public void run() {
 		// TODO Auto-generated method stub
 		while(true){
@@ -53,7 +45,7 @@ public class VDFWorker implements Runnable {
 				}
 			}
 		}
->>>>>>> 90e2bb8611e5be08a79ef48a738b0efbc5e7312b
+
 	}
 
 }
