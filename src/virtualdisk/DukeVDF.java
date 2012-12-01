@@ -44,8 +44,6 @@ public class DukeVDF extends VirtualDisk {
 		// TODO Auto-generated method stub
 				Request request = new Request(buf, operation); 
 				vdfRequests.add(request); 
-				
-		
 			}
 
 }
