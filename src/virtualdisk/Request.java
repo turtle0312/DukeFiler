@@ -8,6 +8,7 @@ public class Request
 {
 	private DBuffer myBuf; 
 	private DiskOperationType myOperation; 
+	
 	public Request(DBuffer buf, DiskOperationType operation)
 	{
 		myBuf = buf; 
