@@ -22,7 +22,8 @@ public class VDFWorker implements Runnable {
 		// TODO Auto-generated method stub
 		while(true){
 			if(vdfRequests != null){	
-				if(vdfRequests.size() > 0){
+				if(vdfRequests.size() > 0)
+				{
 					Request currentRequest = vdfRequests.poll();
 					switch(currentRequest.getOperation()){
 					case READ:
@@ -40,8 +41,6 @@ public class VDFWorker implements Runnable {
 							e.printStackTrace();
 						}
 					}
-					currentRequest.getBuffer();
-					currentRequest.getOperation();
 				}
 			}
 		}

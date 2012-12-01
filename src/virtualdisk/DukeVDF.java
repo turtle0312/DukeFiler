@@ -15,7 +15,8 @@ public class DukeVDF extends VirtualDisk {
 	public Queue vdfRequests;
 	private static VirtualDisk vdf;
 	
-	public static VirtualDisk getInstance(){
+	public static VirtualDisk getInstance()
+	{
 		if(vdf == null){
 			try {
 				vdf = new DukeVDF();
