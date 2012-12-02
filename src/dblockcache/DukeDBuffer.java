@@ -14,6 +14,7 @@ public class DukeDBuffer extends DBuffer
 	private boolean isValid = false;
 	// Is the clean? / Has it NOT been modified
 	private boolean isClean = true;
+	private boolean isBusy = false; // are we busy?
 
 	//Parker is so smart and good looking
 	public DukeDBuffer(int blockID, int bufferSize) {
@@ -91,7 +92,7 @@ public class DukeDBuffer extends DBuffer
 	@Override
 	public boolean isBusy() {
 		// TODO Auto-generated method stub
-		return false;
+		return isBusy;
 	}
 
 	@Override
@@ -130,20 +131,19 @@ public class DukeDBuffer extends DBuffer
 
 	@Override
 	public void ioComplete() {
-		// TODO Auto-generated method stub
-		
+		isClean = true;
+		isValid = true;
+		// Do we need ot notify???
 	}
 
 	@Override
 	public int getBlockID() {
-		// TODO Auto-generated method stub
 		return myBlockID;
 	}
 
 	@Override
 	public byte[] getBuffer() {
-		// TODO Auto-generated method stub
-		return null;
+		return myData;
 	}
 
 }
