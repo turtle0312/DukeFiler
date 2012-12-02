@@ -51,8 +51,7 @@ public class DukeDBuffer extends DBuffer
 
 	@Override
 	public boolean checkClean() {
-		// TODO Auto-generated method stub
-		return false;
+		return isClean;
 	}
 
 	@Override
