@@ -38,8 +38,15 @@ public class DukeDBuffer extends DBuffer
 
 	@Override
 	public boolean waitValid() {
-		// TODO Auto-generated method stub
-		return false;
+		// Wait until we're valid
+		while(!isValid) {
+			try { wait (); }
+			catch (InterruptedException e) {
+				System.out.println("waitValid() failed! DealWithIt.gif");
+				return false
+			}
+		}
+		return true;
 	}
 
 	@Override
