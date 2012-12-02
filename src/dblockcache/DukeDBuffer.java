@@ -1,7 +1,23 @@
 package dblockcache;
 
 public class DukeDBuffer extends DBuffer
-{
+{	
+	//ID for block that this buffer is attached to
+	private int myBlockID; 
+	//data that this block buffer contains 
+	private byte[] myData;
+
+	// Is the buffer data valid?
+	private boolean isValid = false;
+	// Is the clean? / Has it NOT been modified
+	private boolean isClean = true;
+
+
+	public DukeDBuffer(int blockID, int bufferSize) {
+		myBlockID = blockID;
+		myData = new byte[bufferSize];
+
+	}
 
 	@Override
 	public void startFetch() {
@@ -66,7 +82,7 @@ public class DukeDBuffer extends DBuffer
 	@Override
 	public int getBlockID() {
 		// TODO Auto-generated method stub
-		return 0;
+		return myBlockID;
 	}
 
 	@Override
