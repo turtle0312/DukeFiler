@@ -33,8 +33,7 @@ public class DukeDBuffer extends DBuffer
 
 	@Override
 	public boolean checkValid() {
-		// TODO Auto-generated method stub
-		return false;
+		return isValid;
 	}
 
 	@Override
