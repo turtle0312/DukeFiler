@@ -27,7 +27,7 @@ public class DukeDBuffer extends DBuffer
 		// Start the read on the VDF
 		try {
 			DukeVDF.getInstance().startRequest(this,
-				Constants.DiskOperationType.READ) 
+				Constants.DiskOperationType.READ); 
 		}
 		catch (IllegalArgumentException e){
 			System.out.println("IllegalArgumentException, way to go loser.");
@@ -42,7 +42,7 @@ public class DukeDBuffer extends DBuffer
 		// Start the write on the VDF
 		try {
 			DukeVDF.getInstance().startRequest(this,
-				Constants.DiskOperationType.WRITE) 
+				Constants.DiskOperationType.WRITE); 
 		}
 		catch (IllegalArgumentException e){
 			System.out.println("IllegalArgumentException, way to go loser.");
