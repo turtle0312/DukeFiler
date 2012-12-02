@@ -1,5 +1,8 @@
 package dblockcache;
 
+import virtualdisk.DukeVDF;
+import common.Constants;
+
 public class DukeDBuffer extends DBuffer
 {	
 	//ID for block that this buffer is attached to
@@ -22,7 +25,16 @@ public class DukeDBuffer extends DBuffer
 	@Override
 	public void startFetch() {
 		// TODO Auto-generated method stub
-		
+		try {
+			DukeVDF.getInstance().startRequest(this,
+				Constants.DiskOperationType.READ) 
+		}
+		catch (IllegalArgumentException e){
+			System.out.println("IllegalArgumentException, way to go loser.");
+		}
+		catch (IOException e){
+			System.out.println("IOException, way to go loser.");
+		}
 	}
 
 	@Override
