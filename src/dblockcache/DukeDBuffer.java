@@ -2,6 +2,7 @@ package dblockcache;
 
 import virtualdisk.DukeVDF;
 import common.Constants;
+import java.util.concurrent.*;
 
 public class DukeDBuffer extends DBuffer
 {	
@@ -16,6 +17,10 @@ public class DukeDBuffer extends DBuffer
 	private boolean isClean = true;
 	private boolean isBusy = false; // are we busy?
 
+
+	private final Semaphore readMutex = new Semaphore(1);
+	private final Semaphore writeMutex = new Semaphore(1);
+
 	//Parker is so smart and good looking
 	public DukeDBuffer(int blockID, int bufferSize) {
 		myBlockID = blockID;
@@ -23,21 +28,6 @@ public class DukeDBuffer extends DBuffer
 
 	}
 
-	private void lockWrite(){
-
-	}
-
-	private void lockRead(){
-
-	}
-
-	private void unlockWrite() {
-
-	}
-
-	private void unlockRead() {
-		
-	}
 
 	@Override
 	public void startFetch() {
@@ -114,16 +104,16 @@ public class DukeDBuffer extends DBuffer
 	@Override
 	public int read(byte[] buffer, int startOffset, int count) {
 		// Read in data from block, start write to buffer at location: offset
-		lockRead();
+		readMutex.acquire();
 		try {
 			for (int i=0; i<count; i++) { //iterate over 
 				buffer[startOffset + 1] = myData[i];
 			}
 		catch (Exception e)
 			{
-			unlockRead(); retun -1;
+			readMutex.release(); retun -1;
 			}
-		unlockRead();
+		readMutex.release();
 		return 1; //what should we return?
 		}
 	}
@@ -131,16 +121,16 @@ public class DukeDBuffer extends DBuffer
 	@Override
 	public int write(byte[] buffer, int startOffset, int count) {
 		// Write in data to block, start write to block from buffer location: offset
-		lockWrite();
+		writeMutex.acquire();
 		try {
 			for (int i=0; i<count; i++) { //iterate over 
 				myData[i] = buffer[startOffset + 1]
 			}
 		catch (Exception e)
 			{
-			unlockWrite(); retun -1;
+			writeMutex.release(); retun -1;
 			}
-		unlockWrite();
+		writeMutex.release();
 		return 1; //what should we return?
 		}
 	}
