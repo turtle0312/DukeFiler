@@ -56,8 +56,15 @@ public class DukeDBuffer extends DBuffer
 
 	@Override
 	public boolean waitClean() {
-		// TODO Auto-generated method stub
-		return false;
+		// Wait until we're clean
+		while(!isClean) {
+			try { wait (); }
+			catch (InterruptedException e) {
+				System.out.println("waitClean() failed! DealWithIt.gif");
+				return false
+			}
+		}
+		return true;
 	}
 
 	@Override
