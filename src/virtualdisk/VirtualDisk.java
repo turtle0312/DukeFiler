@@ -19,7 +19,7 @@ public abstract class VirtualDisk implements IVirtualDisk {
 	private String _volName;
 	private RandomAccessFile _file;
 	private int _maxVolSize;
-	// public int offset; 
+ 	public int offset; //How many iNodes are there? Needed for blockID
 	public LinkedList iNodes; // LinkedList of Arrays
 	public LinkedList dataBlocks; //LinkedList of bytes
 	/*
@@ -49,7 +49,9 @@ public abstract class VirtualDisk implements IVirtualDisk {
 		}
 
 		/* Create VDF Block layout, add metadata/offset */
-		// iNodes = new LinkedList()
+		offset = 0;
+		iNodes = new LinkedList();
+		dataBlocks = new LinkedList();
 
 		/* Other methods as required */
 	}
@@ -89,6 +91,14 @@ public abstract class VirtualDisk implements IVirtualDisk {
 								+ i);
 			}
 		}
+	}
+
+	public void incOffset(){
+		offset++;
+	}
+
+	public void decOffset(){
+		offset--;
 	}
 
 	/*
