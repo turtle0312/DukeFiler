@@ -24,7 +24,7 @@ public class DukeDBuffer extends DBuffer
 
 	@Override
 	public void startFetch() {
-		// TODO Auto-generated method stub
+		// Start the read on the VDF
 		try {
 			DukeVDF.getInstance().startRequest(this,
 				Constants.DiskOperationType.READ) 
@@ -39,8 +39,17 @@ public class DukeDBuffer extends DBuffer
 
 	@Override
 	public void startPush() {
-		// TODO Auto-generated method stub
-		
+		// Start the write on the VDF
+		try {
+			DukeVDF.getInstance().startRequest(this,
+				Constants.DiskOperationType.WRITE) 
+		}
+		catch (IllegalArgumentException e){
+			System.out.println("IllegalArgumentException, way to go loser.");
+		}
+		catch (IOException e){
+			System.out.println("IOException, way to go loser.");
+		}
 	}
 
 	@Override
