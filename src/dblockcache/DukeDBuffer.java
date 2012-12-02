@@ -23,6 +23,22 @@ public class DukeDBuffer extends DBuffer
 
 	}
 
+	private void lockWrite(){
+
+	}
+
+	private void lockRead(){
+
+	}
+
+	private void unlockWrite() {
+
+	}
+
+	private void unlockRead() {
+		
+	}
+
 	@Override
 	public void startFetch() {
 		// Start the read on the VDF
@@ -98,16 +114,16 @@ public class DukeDBuffer extends DBuffer
 	@Override
 	public int read(byte[] buffer, int startOffset, int count) {
 		// Read in data from block, start write to buffer at location: offset
-		holdRead();
+		lockRead();
 		try {
 			for (int i=0; i<count; i++) { //iterate over 
 				buffer[startOffset + 1] = myData[i];
 			}
 		catch (Exception e)
 			{
-			releaseRead(); retun -1;
+			unlockRead(); retun -1;
 			}
-		releaseRead();
+		unlockRead();
 		return 1; //what should we return?
 		}
 	}
@@ -115,16 +131,16 @@ public class DukeDBuffer extends DBuffer
 	@Override
 	public int write(byte[] buffer, int startOffset, int count) {
 		// Write in data to block, start write to block from buffer location: offset
-		holdWrite();
+		lockWrite();
 		try {
 			for (int i=0; i<count; i++) { //iterate over 
 				myData[i] = buffer[startOffset + 1]
 			}
 		catch (Exception e)
 			{
-			releaseWrite(); retun -1;
+			unlockWrite(); retun -1;
 			}
-		releaseWrite();
+		unlockWrite();
 		return 1; //what should we return?
 		}
 	}
