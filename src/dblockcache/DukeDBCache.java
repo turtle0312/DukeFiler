@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import common.Constants;
 
 import virtualdisk.DukeVDF;
 
@@ -58,7 +59,7 @@ public class DukeDBCache extends DBufferCache
 		for (int i=0; i<_cacheSize; i++){
 			buffer = cacheList.get(i);
 			if (!buffer.isBusy()) {
-				if (!buffer.checkClean() && buffer.isValid()) //write if the buffer isn't clean
+				if (!buffer.checkClean() && buffer.checkValid()) //write if the buffer isn't clean
 					buffer.startPush()
 
 				cacheList.remove(i); //remove the buffer
