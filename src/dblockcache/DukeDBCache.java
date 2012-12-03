@@ -60,11 +60,11 @@ public class DukeDBCache extends DBufferCache
 			buffer = cacheList.get(i);
 			if (!buffer.isBusy()) {
 				if (!buffer.checkClean() && buffer.checkValid()) //write if the buffer isn't clean
-					buffer.startPush()
+					buffer.startPush();
 
 				cacheList.remove(i); //remove the buffer
 				//create a new epty one
-				buffer = new DukeDBuffer(blockID, Constants.BLOCK_SIZE)
+				buffer = new DukeDBuffer(blockID, Constants.BLOCK_SIZE);
 				cacheList.addFirst(buffer); 
 				return buffer;
 			}
@@ -101,6 +101,6 @@ public class DukeDBCache extends DBufferCache
 				buffer.startPush();
 				buffer.waitClean();
 			}
+		}
 	}
-
 }
