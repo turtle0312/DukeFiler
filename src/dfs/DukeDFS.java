@@ -21,6 +21,9 @@ public class DukeDFS extends DFS{
     @Override
     public void destroyDFile(DFileID dFID) {
         // TODO Auto-generated method stub
+        // Scan over iNodes and get the DFileID of each
+        // one. When we find a match, kill the associated
+        // data blocks and then kill the iNode itself
         
     }
 
