@@ -33,6 +33,10 @@ public class DukeDFS extends DFS{
     @Override
     public int write(DFileID dFID, byte[] buffer, int startOffset, int count) {
         // TODO Auto-generated method stub
+        // Convert the filename/dFID and filesize to byte[]
+        // Write that data as the metadata to an iNode in the VDS
+        // then store the buffer in blocks and reference
+        // those blockIDs, sequentially, in iNode
         return 0;
     }
 
