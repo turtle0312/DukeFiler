@@ -3,6 +3,7 @@ package dblockcache;
 import virtualdisk.DukeVDF;
 import common.Constants;
 import java.util.concurrent.*;
+import java.io.IOException;
 
 public class DukeDBuffer extends DBuffer
 {	
@@ -71,7 +72,7 @@ public class DukeDBuffer extends DBuffer
 			try { wait (); }
 			catch (InterruptedException e) {
 				System.out.println("waitValid() failed! DealWithIt.gif");
-				return false
+				return false;
 			}
 		}
 		return true;
@@ -89,7 +90,7 @@ public class DukeDBuffer extends DBuffer
 			try { wait (); }
 			catch (InterruptedException e) {
 				System.out.println("waitClean() failed! DealWithIt.gif");
-				return false
+				return false;
 			}
 		}
 		return true;
@@ -104,35 +105,36 @@ public class DukeDBuffer extends DBuffer
 	@Override
 	public int read(byte[] buffer, int startOffset, int count) {
 		// Read in data from block, start write to buffer at location: offset
-		readMutex.acquire();
 		try {
+			readMutex.acquire();
 			for (int i=0; i<count; i++) { //iterate over 
 				buffer[startOffset + 1] = myData[i];
+				}
 			}
 		catch (Exception e)
 			{
-			readMutex.release(); retun -1;
+			readMutex.release(); return -1;
 			}
 		readMutex.release();
 		return 1; //what should we return?
-		}
 	}
+	
 
 	@Override
 	public int write(byte[] buffer, int startOffset, int count) {
 		// Write in data to block, start write to block from buffer location: offset
-		writeMutex.acquire();
 		try {
+			writeMutex.acquire();
 			for (int i=0; i<count; i++) { //iterate over 
-				myData[i] = buffer[startOffset + 1]
+				myData[i] = buffer[startOffset + 1];
+				}
 			}
 		catch (Exception e)
 			{
-			writeMutex.release(); retun -1;
+			writeMutex.release(); return -1;
 			}
 		writeMutex.release();
 		return 1; //what should we return?
-		}
 	}
 
 	@Override
