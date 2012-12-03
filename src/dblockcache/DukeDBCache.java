@@ -32,7 +32,7 @@ public class DukeDBCache extends DBufferCache
 
 	}
 	
-	public DBufferCache getInstance()
+	public static DBufferCache getInstance()
 	{
 		if(dBufCache == null)
 		{

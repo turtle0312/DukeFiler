@@ -1,5 +1,6 @@
 package dfs;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import common.Constants;
@@ -9,18 +10,25 @@ public abstract class DFS {
 		
 	private boolean _format;
 	private String _volName;
+	protected List<DFileID> dFiles; 
 
-	DFS(String volName, boolean format) {
+	public DFS(String volName, boolean format) {
 		_volName = volName;
 		_format = format;
+		dFiles = new ArrayList<DFileID>(); 
+		
 	}
 	
-	DFS(boolean format) {
+	public DFS(boolean format) {
 		this(Constants.vdiskName,format);
+		dFiles = new ArrayList<DFileID>(); 
+
 	}
 
-	DFS() {
+	public DFS() {
 		this(Constants.vdiskName,false);
+		dFiles = new ArrayList<DFileID>(); 
+
 	}
 
 	/*

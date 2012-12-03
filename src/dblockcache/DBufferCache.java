@@ -4,7 +4,7 @@ import common.Constants;
 
 public abstract class DBufferCache {
 	
-	protected int _cacheSize;
+	protected static int _cacheSize;
 	
 	/*
 	 * Constructor: allocates a cacheSize number of cache blocks, each
