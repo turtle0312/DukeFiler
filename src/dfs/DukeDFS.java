@@ -33,6 +33,11 @@ public class DukeDFS extends DFS{
         return 0;
     }
 
+    
+    /*
+     * writes to the file specified by DFileID from the buffer starting from the
+     * buffer offset startOffsetl at most count bytes are transferred
+     */
     @Override
     public int write(DFileID dFID, byte[] buffer, int startOffset, int count) {
         // TODO Auto-generated method stub
