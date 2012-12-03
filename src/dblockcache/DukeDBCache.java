@@ -92,8 +92,14 @@ public class DukeDBCache extends DBufferCache
 
 	@Override
 	public void sync() {
-		// TODO Auto-generated method stub
-		
+		DBuffer buffer = null;
+		for (int i=0; i<_cacheSize; i++){
+			buffer = cacheList.get(i);	
+			if (buffer.checkValid() && !buffer.checkClean() )
+			{
+				buffer.startPush();
+				buffer.waitClean();
+			}
 	}
 
 }
