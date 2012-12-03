@@ -17,6 +17,7 @@ public class DukeDBCache extends DBufferCache
 	//To use LRU we use a LL where the most recently used blocks
 	// are at the beginning (index i=0) of the list
 	private LinkedList<DBuffer> cacheList; 
+	private LinkedList<Boolean> isHeld;
 	
 	private DukeDBCache(int cacheSize) 
 	{
@@ -25,10 +26,14 @@ public class DukeDBCache extends DBufferCache
 		// cacheSet = Collections.synchronizedSet(set);
 		// TODO Auto-generated constructor stub
 		cacheList = new LinkedList<DBuffer>();
+		isHeld = new LinkedList<Boolean>();
+
 
 		// Initialize the new LinkedList
-		for (int i =0; i<cacheSize; i++)
+		for (int i =0; i<cacheSize; i++) {
 			cacheList.add(new DukeDBuffer(-1, Constants.BLOCK_SIZE));
+			isHeld.add(false);
+		}
 
 	}
 	
@@ -47,9 +52,11 @@ public class DukeDBCache extends DBufferCache
 		DBuffer buffer = null;
 		
 		for (int i=0; i<_cacheSize; i++){
-			if ( ((DBuffer) cacheList.get(i)).getBlockID() == blockID) {
+			if ( ((DBuffer) cacheList.get(i)).getBlockID() == blockID && !isHeld.get(i) ) {
 				buffer = cacheList.remove(i);
+				isHeld.remove(i);
 				cacheList.addFirst(buffer); //Add back to front because this is now MRU
+				isHeld.addFirst(true); // Mark this buffer as in use, held
 				return buffer;
 			}
 		}
@@ -58,14 +65,16 @@ public class DukeDBCache extends DBufferCache
 		//out a spot for it
 		for (int i=0; i<_cacheSize; i++){
 			buffer = cacheList.get(i);
-			if (!buffer.isBusy()) {
+			if ( !buffer.isBusy() && !isHeld.get(i) ) {
 				if (!buffer.checkClean() && buffer.checkValid()) //write if the buffer isn't clean
 					buffer.startPush();
 
 				cacheList.remove(i); //remove the buffer
+				isHeld.remove(i);
 				//create a new epty one
 				buffer = new DukeDBuffer(blockID, Constants.BLOCK_SIZE);
 				cacheList.addFirst(buffer); 
+				isHeld.addFirst(true);
 				return buffer;
 			}
 
@@ -82,9 +91,10 @@ public class DukeDBCache extends DBufferCache
 	{
 		int index = cacheList.indexOf(buf); // find the index of the buffer
 		DBuffer buffer = cacheList.remove(index); // remove the buffer
+		isHeld.remove(index);
 		cacheList.addFirst(buffer); // put the buffer in the front
 		// as it is now the most recently accessed block
-
+		isHeld.addFirst(false); //we're releasing the block for use now
 		//now notify everyone who is waiting on it
 		notifyAll();
 

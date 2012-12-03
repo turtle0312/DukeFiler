@@ -51,6 +51,9 @@ public class DukeDFS extends DFS
     @Override
     public void destroyDFile(DFileID dFID) {
         // TODO Auto-generated method stub
+        // Scan over iNodes and get the DFileID of each
+        // one. When we find a match, kill the associated
+        // data blocks and then kill the iNode itself
         
     }
 
@@ -91,9 +94,18 @@ public class DukeDFS extends DFS
     	return 0;
     }
 
+    
+    /*
+     * writes to the file specified by DFileID from the buffer starting from the
+     * buffer offset startOffsetl at most count bytes are transferred
+     */
     @Override
     public int write(DFileID dFID, byte[] buffer, int startOffset, int count) {
         // TODO Auto-generated method stub
+        // Convert the filename/dFID and filesize to byte[]
+        // Write that data as the metadata to an iNode in the VDS
+        // then store the buffer in blocks and reference
+        // those blockIDs, sequentially, in iNode
         return 0;
     }
 
