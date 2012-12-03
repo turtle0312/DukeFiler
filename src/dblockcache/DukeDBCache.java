@@ -47,14 +47,31 @@ public class DukeDBCache extends DBufferCache
 		
 		for (int i=0; i<_cacheSize; i++){
 			if ( ((DBuffer) cacheList.get(i)).getBlockID() == blockID) {
-				buffer = myCache.remove(i);
-				myCache.addFirst(buffer); //Add back to front because this is now MRU
+				buffer = cacheList.remove(i);
+				cacheList.addFirst(buffer); //Add back to front because this is now MRU
 				return buffer;
 			}
 		}
 
 		//If we get here, it means the block wasn't found so now we need to clear
 		//out a spot for it
+		for (int i=0; i<_cacheSize; i++){
+			buffer = cacheList.get(i);
+			if (!buffer.isBusy()) {
+				if (!buffer.checkClean() && buffer.isValid()) //write if the buffer isn't clean
+					buffer.startPush()
+
+				cacheList.remove(i); //remove the buffer
+				//create a new epty one
+				buffer = new Buffer(blockID, Constants.BLOCK_SIZE)
+				cacheList.addFirst(buffer); 
+				return buffer;
+			}
+
+		}
+
+		//If we're here then all of the blocks were busy, unlikely, but possible?
+
 
 		return null;
 	}
