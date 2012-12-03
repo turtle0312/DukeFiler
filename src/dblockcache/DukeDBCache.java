@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 import common.Constants;
 
 import virtualdisk.DukeVDF;
@@ -28,7 +28,7 @@ public class DukeDBCache extends DBufferCache
 
 		// Initialize the new LinkedList
 		for (int i =0; i<cacheSize; i++)
-			cacheList.add(new Buffer(-1, Constants.BLOCK_SIZE));
+			cacheList.add(new DukeDBuffer(-1, Constants.BLOCK_SIZE));
 
 	}
 	
@@ -64,7 +64,7 @@ public class DukeDBCache extends DBufferCache
 
 				cacheList.remove(i); //remove the buffer
 				//create a new epty one
-				buffer = new Buffer(blockID, Constants.BLOCK_SIZE)
+				buffer = new DukeDBuffer(blockID, Constants.BLOCK_SIZE)
 				cacheList.addFirst(buffer); 
 				return buffer;
 			}
