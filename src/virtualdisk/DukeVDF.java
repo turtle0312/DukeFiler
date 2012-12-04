@@ -19,7 +19,7 @@ public class DukeVDF extends VirtualDisk {
 		if(vdf == null){
 			try {
 				vdf = new DukeVDF();
-				Thread t = new Thread(new VDFWorker(vdfRequests));
+				Thread t = new Thread(new VDFWorker());
 				t.start();				
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block

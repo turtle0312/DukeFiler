@@ -7,12 +7,9 @@ import common.Constants.DiskOperationType;
 
 public class VDFWorker implements Runnable {
 
-
-	public Queue<Request> vdfRequests;
 	public VirtualDisk vdf;
 	
-	public VDFWorker(Queue<Request> vdfRequests){
-		this.vdfRequests = vdfRequests;
+	public VDFWorker(){
 		this.vdf = DukeVDF.getInstance();
 	}
 	
@@ -21,10 +18,10 @@ public class VDFWorker implements Runnable {
 	public void run() {
 		// TODO Auto-generated method stub
 		while(true){
-			if(vdfRequests != null){	
-				if(vdfRequests.size() > 0)
+			if(DukeVDF.vdfRequests != null){	
+				if(DukeVDF.vdfRequests.size() > 0)
 				{
-					Request currentRequest = vdfRequests.poll();
+					Request currentRequest = DukeVDF.vdfRequests.poll();
 					switch(currentRequest.getOperation()){
 					case READ:
 						try {
@@ -33,6 +30,7 @@ public class VDFWorker implements Runnable {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
 						}
+						break;
 					case WRITE:
 						try {
 							vdf.writeBlock(currentRequest.getBuffer());
@@ -40,6 +38,7 @@ public class VDFWorker implements Runnable {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
+						break;
 					}
 				}
 			}

@@ -135,8 +135,9 @@ public class DukeDBuffer extends DBuffer
 				myData[i] = buffer[startOffset + i];
 				numWritten++;
 				}
-			startPush();
 			writeMutex.release(); 
+
+			startPush();
 			return numWritten; 
 			}
 		catch (Exception e)

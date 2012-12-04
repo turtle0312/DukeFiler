@@ -28,13 +28,11 @@ public class DukeDBCache extends DBufferCache
 		cacheList = new LinkedList<DBuffer>();
 		isHeld = new LinkedList<Boolean>();
 
-
 		// Initialize the new LinkedList
 		for (int i =0; i<cacheSize; i++) {
 			cacheList.add(new DukeDBuffer(-1, Constants.BLOCK_SIZE));
 			isHeld.add(false);
 		}
-
 	}
 	
 	public static DBufferCache getInstance()
