@@ -119,6 +119,7 @@ public class DukeDBuffer extends DBuffer
 			}
 		catch (Exception e)
 			{
+			e.printStackTrace();
 			readMutex.release(); return -1;
 			}
 	}

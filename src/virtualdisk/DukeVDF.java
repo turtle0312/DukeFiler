@@ -2,17 +2,16 @@ package virtualdisk;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.Queue;
-import java.util.concurrent.SynchronousQueue;
 
-import common.Constants;
 import common.Constants.DiskOperationType;
 
 import dblockcache.DBuffer;
 
 public class DukeVDF extends VirtualDisk {
 
-	public static Queue vdfRequests;
+	public static Queue<Request> vdfRequests = new LinkedList<Request>();
 	private static VirtualDisk vdf;
 	
 	public static VirtualDisk getInstance()
