@@ -82,7 +82,7 @@ public class DukeDBCache extends DBufferCache
 
 		//If we're here then all of the blocks were busy, unlikely, but possible?
 
-
+		Systen.out.println("We should not be here");
 		return null;
 	}
 
