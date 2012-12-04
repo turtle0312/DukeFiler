@@ -66,28 +66,21 @@ public class DukeDFS extends DFS
     {
     	//Get Inode for the file
     	//Get corresponding blockIDs for the file from the Inode
+    	
     	List<Integer> listOfBlockIDs = new ArrayList<Integer>(); 
-    	int offsetConstant = 0; 
+    	int numRead; 
     	for(Integer i : listOfBlockIDs)
     	{
-    		DBuffer buf = DukeDBCache.getInstance().getBlock(i); 
-    		//int numRead = buf.read(buffer, startOffset, count)
-    		
-    		
-    		
-    		
-    		
-    		
-    		
-    	
-    		
-    		
-    		
-    		
-    		
-    	//	int numRead = buf.read(new byte[Constants.BLOCK_SIZE], startOffset, count)
-    		
+    		if(!(count <= 0) && !(startOffset >= buffer.length))
+    		{  	
+	    		DBuffer buf = DukeDBCache.getInstance().getBlock(i);     		
+	    		numRead = buf.read(buffer, startOffset, count);     		
+	    		count = count - numRead; 
+	    		startOffset = startOffset + numRead;     		
+    		}
     	}
+    	
+    	
     	//Fetch corresponding DBuffer from DBufferCache using block ID
     	//Read data from those blocks into the byte[] up till count bytes
     	
