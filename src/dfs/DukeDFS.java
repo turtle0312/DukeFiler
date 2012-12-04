@@ -247,7 +247,20 @@ public class DukeDFS extends DFS
     @Override
     public int sizeDFile(DFileID dFID) {
         // TODO Auto-generated method stub
-        return 0;
+	   	 int iNodeBlockID = 6 + dFID.getDFileID();
+		 DBuffer iNodeDBuffer = DukeDBCache.getInstance().getBlock(iNodeBlockID);
+		 byte[] iNodeBuffer = new byte[Constants.BLOCK_SIZE];
+		 iNodeDBuffer.read(iNodeBuffer, 0, Constants.BLOCK_SIZE);
+		 
+		 int fileSize = 0;
+		 byte[] fileSizeBytes = new byte[4];
+		 for(int i=0;i<4;i++){
+			 fileSizeBytes[i] = iNodeBuffer[i];
+		 }
+		 
+		 fileSize = java.nio.ByteBuffer.wrap(fileSizeBytes).getInt();
+    	
+        return fileSize;
     }
 
     @Override
