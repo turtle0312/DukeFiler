@@ -46,13 +46,15 @@ public class DukeDFS extends DFS
     public synchronized DFileID createDFile() {
         // TODO Auto-generated method stub
     	DFileID retID = null;
-   	 	DBuffer iNodeMapDBuffer = DukeDBCache.getInstance().getBlock(1);
+    	DBufferCache cache = DukeDBCache.getInstance();
+   	 	DBuffer iNodeMapDBuffer = cache.getBlock(1);
    	 	byte[] iNodeBuffer = new byte[Constants.BLOCK_SIZE];
    	 	iNodeMapDBuffer.read(iNodeBuffer, 0, Constants.BLOCK_SIZE);
     	
    	 	for(int i=0;i<iNodeBuffer.length;i++){
    	 		if(iNodeBuffer[i] == 0){
    	 			retID = new DFileID(i);
+   	 			break;
    	 		}
    	 	}  	 	
    	 	

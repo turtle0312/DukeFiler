@@ -12,7 +12,7 @@ import dblockcache.DBuffer;
 
 public class DukeVDF extends VirtualDisk {
 
-	public Queue vdfRequests;
+	public static Queue vdfRequests;
 	private static VirtualDisk vdf;
 	
 	public static VirtualDisk getInstance()
@@ -20,6 +20,8 @@ public class DukeVDF extends VirtualDisk {
 		if(vdf == null){
 			try {
 				vdf = new DukeVDF();
+				Thread t = new Thread(new VDFWorker(vdfRequests));
+				t.start();				
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

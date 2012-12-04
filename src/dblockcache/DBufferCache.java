@@ -11,7 +11,7 @@ public abstract class DBufferCache {
 	 * containing BLOCK-size bytes data, in memory
 	 */
 	public DBufferCache(int cacheSize) {
-		_cacheSize = cacheSize * Constants.BLOCK_SIZE;
+		_cacheSize = cacheSize;// * Constants.BLOCK_SIZE;
 	}
 	
 	/*

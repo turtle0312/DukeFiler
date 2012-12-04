@@ -41,7 +41,7 @@ public class DukeDBCache extends DBufferCache
 	{
 		if(dBufCache == null)
 		{
-			dBufCache = new DukeDBCache(_cacheSize);
+			dBufCache = new DukeDBCache(Constants.CACHE_SIZE);
 		}
 		return dBufCache; 
 	}

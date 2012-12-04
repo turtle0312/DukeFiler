@@ -108,6 +108,7 @@ public class DukeDBuffer extends DBuffer
 		// Read in data from block, start write to buffer at location: offset
 		try {
 			readMutex.acquire();
+			startFetch();
 			int numRead = 0; 
 			for (int i=0; (i<count) && (startOffset + i != buffer.length); i++) { //iterate over 
 				buffer[startOffset + i] = myData[i];
@@ -133,6 +134,7 @@ public class DukeDBuffer extends DBuffer
 				myData[i] = buffer[startOffset + i];
 				numWritten++;
 				}
+			startPush();
 			writeMutex.release(); 
 			return numWritten; 
 			}
