@@ -104,54 +104,58 @@ public class DukeDBuffer extends DBuffer
 	}
 
 	@Override
-	public int read(byte[] buffer, int startOffset, int count) {
+	public synchronized int read(byte[] buffer, int startOffset, int count) {
 		// Read in data from block, start write to buffer at location: offset
 		try {
-			readMutex.acquire();
+			//readMutex.acquire();
 			startFetch();
 			int numRead = 0; 
 			for (int i=0; (i<count) && (startOffset + i != buffer.length); i++) { //iterate over 
 				buffer[startOffset + i] = myData[i];
 				numRead++; 
 				}
-			readMutex.release(); 
+			//readMutex.release(); 
+			//readMutex.wait();
 			return numRead; 
 			}
 		catch (Exception e)
 			{
 			e.printStackTrace();
-			readMutex.release(); return -1;
+			//readMutex.release();
+			return -1;
 			}
 	}
 	
 
 	@Override
-	public int write(byte[] buffer, int startOffset, int count) {
+	public synchronized int write(byte[] buffer, int startOffset, int count) {
 		// Write in data to block, start write to block from buffer location: offset
 		try {
-			writeMutex.acquire();
+			//writeMutex.acquire();
 			int numWritten = 0; 
 			for (int i=0; (i<count) && (startOffset + i < buffer.length); i++) { //iterate over 
 				myData[i] = buffer[startOffset + i];
 				numWritten++;
 				}
-			writeMutex.release(); 
+			//writeMutex.release(); 
 
 			startPush();
+			//readMutex.wait();
 			return numWritten; 
 			}
 		catch (Exception e)
 			{
-			writeMutex.release(); return -1;
+			//writeMutex.release(); 
+			return -1;
 			}
 	}
 
 	@Override
 	public void ioComplete() {
-		isClean = true;
+		isClean = true;	
 		isValid = true;
 		// Do we need ot notify???
-		notifyAll();
+		//readMutex.notifyAll();
 
 	}
 

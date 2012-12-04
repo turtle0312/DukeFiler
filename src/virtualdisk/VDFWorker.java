@@ -26,6 +26,7 @@ public class VDFWorker implements Runnable {
 					case READ:
 						try {
 							vdf.readBlock(currentRequest.getBuffer());
+							currentRequest.getBuffer().ioComplete();
 						} catch (IOException e1) {
 							// TODO Auto-generated catch block
 							e1.printStackTrace();
@@ -34,6 +35,7 @@ public class VDFWorker implements Runnable {
 					case WRITE:
 						try {
 							vdf.writeBlock(currentRequest.getBuffer());
+							currentRequest.getBuffer().ioComplete();
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();

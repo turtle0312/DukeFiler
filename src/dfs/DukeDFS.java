@@ -63,16 +63,25 @@ public class DukeDFS extends DFS
    	 	byte[] iNodeBuffer = new byte[Constants.BLOCK_SIZE];
    	 	iNodeMapDBuffer.read(iNodeBuffer, 0, Constants.BLOCK_SIZE);
     	
+   	 	byte[] modifiedINodeBuffer = new byte[Constants.BLOCK_SIZE];
+   	 	boolean found = false;
    	 	for(int i=0;i<iNodeBuffer.length;i++){
-   	 		if(iNodeBuffer[i] == 0){
+   	 		modifiedINodeBuffer[i] = iNodeBuffer[i];
+   	 		if(iNodeBuffer[i] == 0 && found == false){
    	 			retID = new DFileID(i);
-   	 			break;
+   	 			found = true;
    	 		}
-   	 	}  	 	
+   	 	}  	 
+   	 	try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
    	 	
    	 	if(retID != null){
-   	 		iNodeBuffer[retID.getDFileID()] = 1;
-   	 		iNodeMapDBuffer.write(iNodeBuffer, 0, Constants.BLOCK_SIZE);
+   	 		modifiedINodeBuffer[retID.getDFileID()] = 1;
+   	 		iNodeMapDBuffer.write(modifiedINodeBuffer, 0, Constants.BLOCK_SIZE);
    	 	}
    	 	
    	 	return retID;

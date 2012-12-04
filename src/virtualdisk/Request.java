@@ -11,7 +11,7 @@ public class Request
 	
 	public Request(DBuffer buf, DiskOperationType operation)
 	{
-		myBuf = buf; 
+		myBuf = buf;
 		myOperation = operation; 
 	}
 	
