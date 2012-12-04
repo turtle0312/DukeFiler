@@ -99,6 +99,22 @@ public class DukeDFS extends DFS
         // Write that data as the metadata to an iNode in the VDS
         // then store the buffer in blocks and reference
         // those blockIDs, sequentially, in iNode
+    	
+    	List<Integer> listOfBlockIDs = new ArrayList<Integer>(); 
+    	int numWritten; 
+    	for(Integer i : listOfBlockIDs)
+    	{
+    		if(!(count <= 0) && !(startOffset >= buffer.length))
+    		{  	
+	    		DBuffer buf = DukeDBCache.getInstance().getBlock(i);     		
+	    		numWritten = buf.write(buffer, startOffset, count);     		
+	    		count = count - numWritten; 
+	    		startOffset = startOffset + numWritten;     		
+    		}
+    	}
+    	
+    	
+    	
         return 0;
     }
 
