@@ -84,6 +84,74 @@ public class DukeDFS extends DFS
         // Scan over iNodes and get the DFileID of each
         // one. When we find a match, kill the associated
         // data blocks and then kill the iNode itself
+           // TODO Auto-generated method stub
+        // Scan over iNodes and get the DFileID of each
+        // one. When we find a match, kill the associated
+        // data blocks and then kill the iNode itself
+        
+        // Set corresponding byte in DFileIDblock to 0
+        DBuffer DFileIDBlock = DukeDBCache.getInstance().getBlock(1);
+        byte[] DFileIDBuffer = new byte[Constants.BLOCK_SIZE];
+        DFileIDBlock.read(DFileIDBuffer, 0, Constants.BLOCK_SIZE);
+        DFileIDBuffer[dFID.getDFileID()] = 0;
+        
+        // set corresponding bits found in inode to 0 in blockmap
+        int iNodeBlockID = 7 + dFID.getDFileID();
+        DBuffer iNodeDBuffer = DukeDBCache.getInstance().getBlock(iNodeBlockID);
+        byte[] iNodeBuffer = new byte[Constants.BLOCK_SIZE];
+        iNodeDBuffer.read(iNodeBuffer, 0, Constants.BLOCK_SIZE);
+        
+        List<Integer> listOfBlockIDs = new ArrayList<Integer>(); 
+
+        int fileSize = 0;
+        byte[] fileSizeBytes = new byte[4];
+        for(int i=0;i<4;i++){
+            fileSizeBytes[i] = iNodeBuffer[i];
+        }
+        
+        fileSize = java.nio.ByteBuffer.wrap(fileSizeBytes).getInt();
+        
+        for(int i=0;i<fileSize-4; i+=4)
+        {
+            byte[] byteArray = new byte[4]; 
+            byteArray[0] = iNodeBuffer[i+4]; 
+            byteArray[1] = iNodeBuffer[i+5]; 
+            byteArray[2] = iNodeBuffer[i+6]; 
+            byteArray[3] = iNodeBuffer[i+7];
+            int blockID = java.nio.ByteBuffer.wrap(byteArray).getInt(); 
+            listOfBlockIDs.add(blockID); 
+        }
+        
+        // Read all 4 blocks in blockMap into memory
+        byte[][] blockIdMap = new byte[4][Constants.BLOCK_SIZE];
+        DBuffer[] blockMapDBuffers = new DBuffer[4];
+        for(int i=0;i<4;i++){
+            blockMapDBuffers[i] = DukeDBCache.getInstance().getBlock(2+i);
+            int dataRead = blockMapDBuffers[i].read(blockIdMap[i], 0, Constants.BLOCK_SIZE);            
+        }
+        // Mark corresponding bits in blockMap as unused
+        for(Integer i : listOfBlockIDs){
+            int block = i / Constants.BLOCK_SIZE;
+            byte[] containingBlock = blockIdMap[block];
+            int index = i % Constants.BLOCK_SIZE;
+            int byteArrayIndex = index / 8;
+            int bitIndex = index % 8;
+            byte containingByte = containingBlock[byteArrayIndex];
+            containingByte &= ~( 1 << bitIndex);    
+            blockIdMap[block][byteArrayIndex] = containingByte;         
+        }
+        
+        
+        // Write modified blockMap back to file
+        for(int i = 0; i < 4; i ++) {
+            DBuffer dbuf = blockMapDBuffers[i];
+            dbuf.write(blockIdMap[i], 0, Constants.BLOCK_SIZE);
+        }
+        
+        // Write modified inode block back to file
+        DFileIDBlock.write(DFileIDBuffer, 0, Constants.BLOCK_SIZE);
+        
+        // clear blocks associated with inode in memory (not necessary)
         
     }
 
