@@ -150,6 +150,8 @@ public class DukeDBuffer extends DBuffer
 		isClean = true;
 		isValid = true;
 		// Do we need ot notify???
+		notifyAll();
+
 	}
 
 	@Override
