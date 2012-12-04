@@ -1,6 +1,7 @@
 package dfs;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import common.Constants;
@@ -45,11 +46,10 @@ public class DukeDFS extends DFS
    	 	dFileDBuffer.read(dFileBuffer, 0, Constants.BLOCK_SIZE);
    	 	for(int k = 0; k < dFileBuffer.length; k++)
    	 	{
-   	 		if(dFileBuffer[k] == 1)
-   	 		{
-   	 			DFileID iD = new DFileID(k); 
-   	 			write(iD, new byte[Constants.BLOCK_SIZE], 0, Constants.BLOCK_SIZE); 
-   	 		}
+ 			DFileID iD = new DFileID(k); 
+ 			byte[] emptyBuffer = new byte[Constants.BLOCK_SIZE]; 
+ 			Arrays.fill(emptyBuffer, (byte) 0);  
+	 		write(iD, emptyBuffer, 0, Constants.BLOCK_SIZE); 
    	 	}
         return false;
     }
@@ -308,6 +308,18 @@ public class DukeDFS extends DFS
     @Override
     public List<DFileID> listAllDFiles() {
         // TODO Auto-generated method stub
+    	List<DFileID> dFiles = new ArrayList<DFileID>(); 
+    	DBuffer dFileDBuffer = DukeDBCache.getInstance().getBlock(1);
+    	byte[] dFileBuffer = new byte[Constants.BLOCK_SIZE];
+   	 	dFileDBuffer.read(dFileBuffer, 0, Constants.BLOCK_SIZE);
+   	 	for(int k = 0; k < dFileBuffer.length; k++)
+   	 	{
+ 			DFileID iD = new DFileID(k); 
+ 			if(dFileBuffer[k] == (byte) 1)
+ 			{
+ 				dFiles.add(iD); 
+ 			}
+   	 	}
         return dFiles; 
     }
 
