@@ -6,4 +6,8 @@ public class DFileID {
 	DFileID(int dFID) {
 		_dFID = dFID;
 	}
+	
+	public int getDFileID(){
+		return _dFID;
+	}
 }

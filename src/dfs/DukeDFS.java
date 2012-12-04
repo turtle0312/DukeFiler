@@ -65,8 +65,40 @@ public class DukeDFS extends DFS
     public int read(DFileID dFID, byte[] buffer, int startOffset, int count) 
     {
     	//Get Inode for the file
+    	// Calculate blockID for corresponding inode
+    	// nothing in block 0 
+    	// 1 = dFileIds
+    	// 3 - 6 = blockMap
+    	// 7 - 518 = inodes
+    	// 519 - end = data blocks 
+    	 int iNodeBlockID = 7 + dFID.getDFileID();
+    	 DBuffer iNodeDBuffer = DukeDBCache.getInstance().getBlock(iNodeBlockID);
+    	 byte[] iNodeBuffer = new byte[Constants.BLOCK_SIZE];
+    	 iNodeDBuffer.read(iNodeBuffer, 0, Constants.BLOCK_SIZE);
+    	 
+    	 int fileSize = 0;
+    	 byte[] fileSizeBytes = new byte[4];
+    	 for(int i=0;i<4;i++){
+    		 fileSizeBytes[i] = iNodeBuffer[i];
+    	 }
+    	 
+    	 fileSize = java.nio.ByteBuffer.wrap(fileSizeBytes).getInt();
+    	
     	//Get corresponding blockIDs for the file from the Inode
     	List<Integer> listOfBlockIDs = new ArrayList<Integer>(); 
+    	
+    	for(int i=0;i<fileSize-4; i+=4)
+    	{
+    		byte[] byteArray = new byte[4]; 
+    		byteArray[0] = iNodeBuffer[i+4]; 
+    		byteArray[1] = iNodeBuffer[i+5]; 
+    		byteArray[2] = iNodeBuffer[i+6]; 
+    		byteArray[3] = iNodeBuffer[i+7];
+    		int blockID = java.nio.ByteBuffer.wrap(byteArray).getInt(); 
+    		listOfBlockIDs.add(blockID); 
+    	}
+    	
+    	
     	int offsetConstant = 0; 
     	for(Integer i : listOfBlockIDs)
     	{
