@@ -111,10 +111,7 @@ public class DukeDFS extends DFS
 	    		count = count - numWritten; 
 	    		startOffset = startOffset + numWritten;     		
     		}
-    	}
-    	
-    	
-    	
+    	}	
         return 0;
     }
 
