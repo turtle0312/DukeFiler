@@ -72,12 +72,6 @@ public class DukeDFS extends DFS
    	 			found = true;
    	 		}
    	 	}  	 
-   	 	try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
    	 	
    	 	if(retID != null){
    	 		modifiedINodeBuffer[retID.getDFileID()] = 1;
@@ -207,7 +201,6 @@ public class DukeDFS extends DFS
     	}    	
     
     	int numRead; 
-
     	for(Integer i : listOfBlockIDs)
     	{
     		if(!(count <= 0) && !(startOffset >= buffer.length))
@@ -250,8 +243,8 @@ public class DukeDFS extends DFS
     	 byte[] iNodeMapBuffer = new byte[Constants.BLOCK_SIZE];
     	 int bytesRead = fileIDBuffer.read(iNodeMapBuffer, 0, Constants.BLOCK_SIZE);
     	 
-    	 if (iNodeMapBuffer[dFID.getDFileID()] != 0)
-    		 return -1;
+    	 //if (iNodeMapBuffer[dFID.getDFileID()] != 0)
+    	//	 return -1;
     	 
     	 int iNodeBlockID = 6 + dFID.getDFileID();
     	 DBuffer iNodeDBuffer = DukeDBCache.getInstance().getBlock(iNodeBlockID);
@@ -309,8 +302,9 @@ public class DukeDFS extends DFS
     	
     	List<Integer> newlyPopulatedBlockIDs = new ArrayList<Integer>();
     	
+    	int dataWritten = 0;
     	// Find empty blocks and write data into them    	
-    	for(int i=0;i<4;i++){
+    	outer:for(int i=0;i<4;i++){
     		for(int j=0;j<blockIdMap[i].length;j++){
     			byte b = blockIdMap[i][j];
     			for(int k=0;k<8;k++){
@@ -320,12 +314,13 @@ public class DukeDFS extends DFS
     					newlyPopulatedBlockIDs.add(index);
     					DBuffer blockDBuffer = DukeDBCache.getInstance().getBlock(517+index);
     					if(count > Constants.BLOCK_SIZE){
-    						int dataWritten = blockDBuffer.write(buffer, startOffset, Constants.BLOCK_SIZE);
+    						dataWritten += blockDBuffer.write(buffer, startOffset, Constants.BLOCK_SIZE);
     						count -= Constants.BLOCK_SIZE;
     					}
     					else{
-    						int dataWritten = blockDBuffer.write(buffer, startOffset, count);
+    						dataWritten += blockDBuffer.write(buffer, startOffset, count);
     						count = 0;
+    						break outer;
     					}
     				}
     			}
@@ -362,7 +357,7 @@ public class DukeDFS extends DFS
     	// Write iNode back to file
     	iNodeDBuffer.write(iNodeData, 0, Constants.BLOCK_SIZE);   	
 
-        return 0;
+        return dataWritten;
     }
 
     @Override

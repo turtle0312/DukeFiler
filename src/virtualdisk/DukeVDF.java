@@ -19,8 +19,8 @@ public class DukeVDF extends VirtualDisk {
 		if(vdf == null){
 			try {
 				vdf = new DukeVDF();
-				Thread t = new Thread(new VDFWorker());
-				t.start();				
+				//Thread t = new Thread(new VDFWorker());
+				//t.start();				
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -43,7 +43,28 @@ public class DukeVDF extends VirtualDisk {
 	public synchronized void startRequest(DBuffer buf, DiskOperationType operation) throws IllegalArgumentException, IOException 
 			{
 		// TODO Auto-generated method stub
-				Request request = new Request(buf, operation); 
-				vdfRequests.add(request); 
+				Request currentRequest = new Request(buf, operation); 
+				//vdfRequests.add(request); 
+				
+				switch(currentRequest.getOperation()){
+				case READ:
+					try {
+						vdf.readBlock(currentRequest.getBuffer());
+						currentRequest.getBuffer().ioComplete();
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					break;
+				case WRITE:
+					try {
+						vdf.writeBlock(currentRequest.getBuffer());
+						currentRequest.getBuffer().ioComplete();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					break;
+				}
 			}
 }

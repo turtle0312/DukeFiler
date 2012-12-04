@@ -50,7 +50,7 @@ public class DukeDBCache extends DBufferCache
 		DBuffer buffer = null;
 		
 		for (int i=0; i<_cacheSize; i++){
-			if ( ((DBuffer) cacheList.get(i)).getBlockID() == blockID && !isHeld.get(i) ) {
+			if ( ((DBuffer) cacheList.get(i)).getBlockID() == blockID && isHeld.get(i) ) {
 				buffer = cacheList.remove(i);
 				isHeld.remove(i);
 				cacheList.addFirst(buffer); //Add back to front because this is now MRU
