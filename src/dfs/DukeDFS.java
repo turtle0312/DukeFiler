@@ -37,8 +37,20 @@ public class DukeDFS extends DFS
 	}
 	
     @Override
-    public boolean format() {
+    public boolean format() 
+    {
         // TODO Auto-generated method stub
+    	DBuffer dFileDBuffer = DukeDBCache.getInstance().getBlock(1);
+    	byte[] dFileBuffer = new byte[Constants.BLOCK_SIZE];
+   	 	dFileDBuffer.read(dFileBuffer, 0, Constants.BLOCK_SIZE);
+   	 	for(int k = 0; k < dFileBuffer.length; k++)
+   	 	{
+   	 		if(dFileBuffer[k] == 1)
+   	 		{
+   	 			DFileID iD = new DFileID(k); 
+   	 			write(iD, new byte[Constants.BLOCK_SIZE], 0, Constants.BLOCK_SIZE); 
+   	 		}
+   	 	}
         return false;
     }
 
