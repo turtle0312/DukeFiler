@@ -15,8 +15,7 @@ public abstract class DFS {
 	public DFS(String volName, boolean format) {
 		_volName = volName;
 		_format = format;
-		dFiles = new ArrayList<DFileID>(); 
-		
+		dFiles = new ArrayList<DFileID>();		
 	}
 	
 	public DFS(boolean format) {
@@ -27,8 +26,7 @@ public abstract class DFS {
 
 	public DFS() {
 		this(Constants.vdiskName,false);
-		dFiles = new ArrayList<DFileID>(); 
-
+		dFiles = new ArrayList<DFileID>();
 	}
 
 	/*

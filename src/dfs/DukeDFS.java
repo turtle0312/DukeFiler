@@ -55,9 +55,25 @@ public class DukeDFS extends DFS
     }
 
     @Override
-    public DFileID createDFile() {
+    public synchronized DFileID createDFile() {
         // TODO Auto-generated method stub
-        return null;
+    	DFileID retID = null;
+   	 	DBuffer iNodeMapDBuffer = DukeDBCache.getInstance().getBlock(1);
+   	 	byte[] iNodeBuffer = new byte[Constants.BLOCK_SIZE];
+   	 	iNodeMapDBuffer.read(iNodeBuffer, 0, Constants.BLOCK_SIZE);
+    	
+   	 	for(int i=0;i<iNodeBuffer.length;i++){
+   	 		if(iNodeBuffer[i] == 0){
+   	 			retID = new DFileID(i);
+   	 		}
+   	 	}  	 	
+   	 	
+   	 	if(retID != null){
+   	 		iNodeBuffer[retID.getDFileID()] = 1;
+   	 		iNodeMapDBuffer.write(iNodeBuffer, 0, Constants.BLOCK_SIZE);
+   	 	}
+   	 	
+   	 	return retID;
     }
 
     @Override
@@ -99,7 +115,6 @@ public class DukeDFS extends DFS
     	//Get corresponding blockIDs for the file from the Inode
     	
     	List<Integer> listOfBlockIDs = new ArrayList<Integer>(); 
-
     	
     	for(int i=0;i<fileSize-4; i+=4)
     	{
@@ -110,8 +125,7 @@ public class DukeDFS extends DFS
     		byteArray[3] = iNodeBuffer[i+7];
     		int blockID = java.nio.ByteBuffer.wrap(byteArray).getInt(); 
     		listOfBlockIDs.add(blockID); 
-    	}
-    	
+    	}    	
     
     	int numRead; 
 
@@ -125,8 +139,7 @@ public class DukeDFS extends DFS
 	    		startOffset = startOffset + numRead;     		
     		}
     	}
-    	
-    	
+    	    	
     	//Fetch corresponding DBuffer from DBufferCache using block ID
     	//Read data from those blocks into the byte[] up till count bytes
     	
@@ -174,11 +187,11 @@ public class DukeDFS extends DFS
     	 
     	 fileSize = java.nio.ByteBuffer.wrap(fileSizeBytes).getInt();
     	 
+    	 // Write size into buffer
     	 iNodeData[0] = (byte) (count >> 24); 
     	 iNodeData[1] = (byte) (count >> 16); 
     	 iNodeData[2] = (byte) (count >> 8); 
-    	 iNodeData[3] = (byte) (count); 
-    	 
+    	 iNodeData[3] = (byte) (count);     	 
     	
     	//Get corresponding blockIDs for the file from the Inode     	 
     	List<Integer> listOfBlockIDs = new ArrayList<Integer>();     	
@@ -215,6 +228,8 @@ public class DukeDFS extends DFS
     		blockIdMap[block][byteArrayIndex] = containingByte;    		
     	}
     	
+    	List<Integer> newlyPopulatedBlockIDs = new ArrayList<Integer>();
+    	
     	// Find empty blocks and write data into them    	
     	for(int i=0;i<4;i++){
     		for(int j=0;j<blockIdMap[i].length;j++){
@@ -223,6 +238,7 @@ public class DukeDFS extends DFS
     				// If bit is not set then fill it with data
     				if(((b >> k) & 1) == 0){
     					int index = i * Constants.BLOCK_SIZE * 8 + j * 8 + k;
+    					newlyPopulatedBlockIDs.add(index);
     					DBuffer blockDBuffer = DukeDBCache.getInstance().getBlock(517+index);
     					if(count > Constants.BLOCK_SIZE){
     						int dataWritten = blockDBuffer.write(buffer, startOffset, Constants.BLOCK_SIZE);
@@ -235,24 +251,38 @@ public class DukeDFS extends DFS
     				}
     			}
     		}
-    	}    	
+    	}
+    	
+    	// Set newly populated block ID's to be marked as used
+    	for(Integer i : listOfBlockIDs){
+    		int block = i / Constants.BLOCK_SIZE;
+    		byte[] containingBlock = blockIdMap[block];
+    		int index = i % Constants.BLOCK_SIZE;
+    		int byteArrayIndex = index / 8;
+    		int bitIndex = index % 8;
+    		byte containingByte = containingBlock[byteArrayIndex];
+    		containingByte |= ( 1 << bitIndex);	
+    		blockIdMap[block][byteArrayIndex] = containingByte;    		
+    	}
     	
     	// Write modified blockMap back to file
-    	for(DBuffer dbuf : blockMapDBuffers){
-    		//dbuf.write(, startOffset, count)
+    	for(int i=0;i<blockMapDBuffers.length;i++){
+    		blockMapDBuffers[i].write(blockIdMap[i], 0, Constants.BLOCK_SIZE);
     	}
-    		
-    	int numWritten; 
-    	for(Integer i : listOfBlockIDs)
-    	{
-    		if(!(count <= 0) && !(startOffset >= buffer.length))
-    		{  	
-	    		DBuffer buf = DukeDBCache.getInstance().getBlock(i);     		
-	    		numWritten = buf.write(buffer, startOffset, count);     		
-	    		count = count - numWritten; 
-	    		startOffset = startOffset + numWritten;     		
-    		}
-    	}	
+    	
+    	int iNodeLoc = 4;
+    	// Write iNode from index 4 on with blockId numbers
+    	for(int i : newlyPopulatedBlockIDs){
+    		iNodeData[iNodeLoc + 0] = (byte) (i >> 24); 
+    		iNodeData[iNodeLoc + 1] = (byte) (i >> 16); 
+    		iNodeData[iNodeLoc + 2] = (byte) (i >> 8); 
+    		iNodeData[iNodeLoc + 3] = (byte) i;  
+    		iNodeLoc+=4;
+    	}
+    	
+    	// Write iNode back to file
+    	iNodeDBuffer.write(iNodeData, 0, Constants.BLOCK_SIZE);   	
+
         return 0;
     }
 
