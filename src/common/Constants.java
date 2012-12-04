@@ -6,7 +6,7 @@ package common;
 public class Constants 
 {
 
-	public static final int NUM_OF_BLOCKS = 16384; // 2^14
+	public static final int NUM_OF_BLOCKS = 16384*2; // 2^15
 	public static final int BLOCK_SIZE = 1024; // 1kB
 	public static final int MAX_DFILES = 512;
 	public static final int MAX_FILE_SIZE = 50; // blocks

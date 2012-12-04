@@ -85,7 +85,9 @@ public class DukeDFS extends DFS
     	 fileSize = java.nio.ByteBuffer.wrap(fileSizeBytes).getInt();
     	
     	//Get corresponding blockIDs for the file from the Inode
+    	
     	List<Integer> listOfBlockIDs = new ArrayList<Integer>(); 
+
     	
     	for(int i=0;i<fileSize-4; i+=4)
     	{
@@ -98,28 +100,21 @@ public class DukeDFS extends DFS
     		listOfBlockIDs.add(blockID); 
     	}
     	
-    	
-    	int offsetConstant = 0; 
+    
+    	int numRead; 
+
     	for(Integer i : listOfBlockIDs)
     	{
-    		DBuffer buf = DukeDBCache.getInstance().getBlock(i); 
-    		//int numRead = buf.read(buffer, startOffset, count)
-    		
-    		
-    		
-    		
-    		
-    		
-    		
-    	
-    		
-    		
-    		
-    		
-    		
-    	//	int numRead = buf.read(new byte[Constants.BLOCK_SIZE], startOffset, count)
-    		
+    		if(!(count <= 0) && !(startOffset >= buffer.length))
+    		{  	
+	    		DBuffer buf = DukeDBCache.getInstance().getBlock(i);     		
+	    		numRead = buf.read(buffer, startOffset, count);     		
+	    		count = count - numRead; 
+	    		startOffset = startOffset + numRead;     		
+    		}
     	}
+    	
+    	
     	//Fetch corresponding DBuffer from DBufferCache using block ID
     	//Read data from those blocks into the byte[] up till count bytes
     	
@@ -138,6 +133,19 @@ public class DukeDFS extends DFS
         // Write that data as the metadata to an iNode in the VDS
         // then store the buffer in blocks and reference
         // those blockIDs, sequentially, in iNode
+    	
+    	List<Integer> listOfBlockIDs = new ArrayList<Integer>(); 
+    	int numWritten; 
+    	for(Integer i : listOfBlockIDs)
+    	{
+    		if(!(count <= 0) && !(startOffset >= buffer.length))
+    		{  	
+	    		DBuffer buf = DukeDBCache.getInstance().getBlock(i);     		
+	    		numWritten = buf.write(buffer, startOffset, count);     		
+	    		count = count - numWritten; 
+	    		startOffset = startOffset + numWritten;     		
+    		}
+    	}	
         return 0;
     }
 
